@@ -1,0 +1,13 @@
+.venv/
+venv/
+env/
+socialmedia/  # Or whatever your venv folder name is
+
+__pycache__/
+*.py[cod]
+
+node_modules/
+build/
+.env
+
+socialmedia/
