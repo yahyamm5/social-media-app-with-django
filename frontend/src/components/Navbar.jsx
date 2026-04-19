@@ -61,7 +61,7 @@ const Navbar = () => {
                 <Button onClick={() => navigate("/feed")} sx={{color:"black"}} >Profile</Button>
               </MenuItem>
               <MenuItem  sx={{ fontSize: '0.9rem' }}>
-                <Button sx={{color:"black"}} >Signup</Button>
+                <Button href='/register' sx={{color:"black"}} >Signup</Button>
               </MenuItem>
               <MenuItem sx={{ fontSize: '0.9rem' }}>
                 <Button sx={{color:"black"}} >Login</Button>

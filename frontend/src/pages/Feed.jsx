@@ -4,11 +4,11 @@ import { userApiStore } from '../api/apiStore';
 import Post from '../components/Post'; 
 
 const Feed = () => {
-  const { posts, fetchFeed, loading, error } = userApiStore();
+  const { posts, personalfetchFeed, loading, error } = userApiStore();
 
   useEffect(() => {
-    fetchFeed();
-  }, [fetchFeed]);
+    personalfetchFeed();
+  }, [personalfetchFeed]);
 
   return (
     <Container maxWidth="sm" sx={{ py: 4 }}>

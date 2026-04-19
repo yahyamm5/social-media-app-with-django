@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { create } from 'zustand'
-import createAuthRefreshInterceptor from 'axios-auth-refresh';
+import { persist } from 'zustand/middleware';
 
 
 const api = axios.create({
@@ -12,7 +12,7 @@ const api = axios.create({
 });
 
 
-export const userApiStore = create((set) => ({
+export const userApiStore = create(persist((set) => ({
     users: [],
     user: null,
     posts: [],
@@ -88,6 +88,29 @@ export const userApiStore = create((set) => ({
         }
     },
 
+    personalfetchFeed: async () => {
+        set({ loading: true, error: null })
+        try {
+            const response = await api.get('personalfeed/');
+            set({ posts: response.data.posts, loading: false });
+        } catch (error) {
+            set({ error: `Failed to load logged in user feed ${error}`, loading: false  })
+        }
+    },
+
+    createpost: async (content) => {
+        set({ loading: true, error: null })
+        try {
+            const response = await api.post('posts/', {content});
+            set({ posts: response.data.content, loading: false });
+        } catch (error) {
+            set({ error: `Failed to create a post ${error}`, loading: false })
+        }
+    }
+
+}), { 
+    name: 'auth-storage',
+    partialize: (state) => ({ accessToken: state.accessToken}),
 }));
 
 api.interceptors.request.use((config) => {
@@ -98,15 +121,23 @@ api.interceptors.request.use((config) => {
     return config;
 });
 
-const refreshAuthLogic = (failedRequest) => 
-    api.post('token/refresh/').then((tokenRefreshResponse) => {
-        const { access } = tokenRefreshResponse.data;
-        userApiStore.getState().setAccessToken(access);
-        failedRequest.response.config.headers.Authorization = `Bearer ${access}`;
-        return Promise.resolve();
-    }).catch((error) => {
-        userApiStore.getState().logout();
-        return Promise.reject(error);
-    });
+api.interceptors.response.use(
+    (response) => response,
+    async (error) => {
+        const originalRequest = error.config;
 
-createAuthRefreshInterceptor(api, refreshAuthLogic);
+        if (error.response.status === 401 && !originalRequest._retry) {
+            originalRequest._retry = true;
+            
+            try {
+                const newAccessToken = await userApiStore.getState().refreshAccessToken();
+                
+                originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+                return api(originalRequest);
+            } catch (refreshError) {
+                return Promise.reject(refreshError);
+            }
+        }
+        return Promise.reject(error);
+    }
+);

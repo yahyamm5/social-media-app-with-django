@@ -1,6 +1,7 @@
 import { Box } from "@mui/material"
 import Navbar from "../components/Navbar"
 import Post from "../components/Post"
+import CreatePost from "../components/CreatePost"
 
 const HomePage = () => {
 
@@ -12,6 +13,7 @@ const HomePage = () => {
         <Box>
             <Post/>
         </Box>
+        <CreatePost/>
     </Box>
   )
 }

@@ -28,6 +28,7 @@ const RegisterPage = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     
@@ -108,7 +109,7 @@ const RegisterPage = () => {
 
               <Grid container justifyContent="center">
                 <Grid item>
-                  <Link href="#" variant="body2" sx={{ textDecoration: 'none', fontWeight: 600 }}>
+                  <Link href="/login" variant="body2" sx={{ textDecoration: 'none', fontWeight: 600 }}>
                     Already have an account? Sign In
                   </Link>
                 </Grid>

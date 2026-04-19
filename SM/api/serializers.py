@@ -52,3 +52,7 @@ class FeedSerializer(serializers.Serializer):
     posts = PostSerializer(many=True)
     pagination_data = serializers.DictField()
 
+
+class PersonalFeed(serializers.Serializer):
+    posts = PostSerializer(many=True)
+    pagination_data = serializers.DictField()

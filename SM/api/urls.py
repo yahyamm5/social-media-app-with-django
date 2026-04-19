@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import UserListCreateView, UserDetailView,LikeToggleView, CommentCreateView, Feedview,PostListCreateView,LogoutView
+from .views import UserListCreateView, UserDetailView,LikeToggleView, CommentCreateView, Feedview,PostListCreateView,LogoutView, PersonalFeedView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 urlpatterns = [
@@ -13,6 +13,7 @@ urlpatterns = [
     path('posts/', PostListCreateView.as_view(), name='post-list'),
     path('posts/<int:post_id>/like/', LikeToggleView.as_view(), name='like-toggle'),
     path('comments/', CommentCreateView.as_view(), name='comment-create'),
-    path('feed/', Feedview.as_view(), name='user-feed'),
+    path('feed/', Feedview.as_view(), name='users-feed'),
+    path('personalfeed/', PersonalFeedView.as_view(), name="personal-feed")
 
 ]

@@ -68,7 +68,7 @@ class LikeToggleView(APIView):
             return Response({"error": "Post not found"}, status.HTTP_404_NOT_FOUND)
         
 class Feedview(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request):
         page = int(request.query_params.get('page', 1))
@@ -81,6 +81,26 @@ class Feedview(APIView):
             "pagination_data": {
                 "current_page": page,
                 "has_next": True
+            }
+        }
+        return Response(payload)
+    
+
+class PersonalFeedView(APIView):
+    permission_classes =[IsAuthenticated]
+
+    def get(self, request):
+        page = int(request.query_params.get('page', 1))
+
+        posts = Post.objects.filter(author=request.user).order_by('-created_at')
+
+        serializer = PostSerializer(posts, many=True)
+
+        payload = {
+            "posts": serializer.data,
+            "pagination_data": {
+                "current_page": page,
+                "has_next": False
             }
         }
         return Response(payload)

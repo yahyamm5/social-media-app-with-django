@@ -88,6 +88,7 @@ const LoginPage = () => {
             
             <Button 
               fullWidth 
+              href='/register'
               variant="text" 
               onClick={() => navigate('/signup')}
               sx={{ textTransform: 'none' }}
