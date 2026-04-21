@@ -19,6 +19,7 @@ export const userApiStore = create(persist((set) => ({
     accessToken: null,
     loading: false,
     error: null,
+    success: null,
     setAccessToken: (token) => set({ accessToken: token }),
 
     fetchUsers: async () => {
@@ -71,6 +72,7 @@ export const userApiStore = create(persist((set) => ({
     logout: async () => {
         try {
             await api.post('logout/');
+            set({ success: true })
         } catch (error) {
             console.error("Logout failed on server", error);
         } finally {
@@ -102,7 +104,10 @@ export const userApiStore = create(persist((set) => ({
         set({ loading: true, error: null })
         try {
             const response = await api.post('posts/', {content});
-            set({ posts: response.data.content, loading: false });
+            set((state) => ({
+                posts: [response.data, ...state.posts],
+                loading: false
+            }));
         } catch (error) {
             set({ error: `Failed to create a post ${error}`, loading: false })
         }

@@ -1,24 +1,20 @@
 import React, { useEffect } from 'react';
-import { Container, Typography, CircularProgress, Box, Alert, Button } from '@mui/material';
+import { Container, Typography, CircularProgress, Box, Alert } from '@mui/material';
 import { userApiStore } from '../api/apiStore';
 import Post from '../components/Post'; 
 
-const Feed = () => {
-  const { posts, personalfetchFeed, loading, accessToken,error } = userApiStore();
+const MainFeed = () => {
+    const { posts, fetchFeed, loading, error } = userApiStore();
+    useEffect(() => {
+        fetchFeed();
+    }, [fetchFeed]);
 
-  useEffect(() => {
-    personalfetchFeed();
-  }, [personalfetchFeed]);
-
-  if (!accessToken) {
-    return <Box sx={{position: "fixed", left: "850px", top: "400px", fontSize: 35, fontFamily: "emoji", }} >no user logged in <Button sx={{fontSize: 30}} href='/login' >login</Button></Box>
-  }
 
   return (
 
     <Container maxWidth="sm" sx={{ py: 4 }}>
       <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', mb: 4 }}>
-        Your Feed
+        Feed
       </Typography>
 
       {loading && (
@@ -34,14 +30,14 @@ const Feed = () => {
           No posts yet. Start following people or create a post!
         </Typography>
       )}
-
+      
       <Box>
         {posts.map((post) => (
-          <Post key={post.id} postData={post} />
-        ))}
-      </Box>
-    </Container>
-  );
-};
+            <Post key={post.id} postData={post} />
+            ))}
+        </Box>
+      </Container>
+    );
+}
 
-export default Feed;
+export default MainFeed

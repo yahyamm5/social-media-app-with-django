@@ -95,6 +95,15 @@ const LoginPage = () => {
             >
               Don't have an account? Sign Up
             </Button>
+              <Button 
+              fullWidth 
+              href='/'
+              variant="text" 
+              onClick={() => navigate('/signup')}
+              sx={{ textTransform: 'none' }}
+            >
+              home page
+            </Button>
           </Box>
         </Paper>
       </Box>

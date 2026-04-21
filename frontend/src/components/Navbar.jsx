@@ -12,17 +12,28 @@ import {
   Button
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
+import { userApiStore } from '../api/apiStore';
 
 const Navbar = () => {
-  // State to track the element that opens the menu
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const navigate = useNavigate();
+  const { logout } = userApiStore();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const handleClose = () => {
     setAnchorEl(null);
@@ -64,11 +75,11 @@ const Navbar = () => {
                 <Button href='/register' sx={{color:"black"}} >Signup</Button>
               </MenuItem>
               <MenuItem sx={{ fontSize: '0.9rem' }}>
-                <Button sx={{color:"black"}} >Login</Button>
+                <Button href='/login' sx={{color:"black"}} >Login</Button>
               </MenuItem>
               <Box sx={{ borderTop: '1px solid #eee', my: 1 }} />
               <MenuItem sx={{ fontSize: '0.9rem', color: 'error.main' }}>
-                <Button  sx={{color: 'error.main'}}>Logout</Button>
+                <Button onClick={handleLogout} sx={{color: 'error.main'}}>Logout</Button>
               </MenuItem>
             </Menu>
           </Box>
